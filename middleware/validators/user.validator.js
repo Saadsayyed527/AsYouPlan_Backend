@@ -1,4 +1,4 @@
-// server/middleware/validators/user.validator.js
+//middleware/validators/user.validator.js
 
 import Joi from 'joi';
 
@@ -58,5 +58,43 @@ export const loginUserSchema = Joi.object({
     .required()
     .messages({
       'any.required': 'Password is required.',
+    }),
+});
+
+export const updateUserSchema = Joi.object({
+  firstName: Joi.string()
+    .min(2)
+    .trim()
+    .messages({
+      'string.min': 'First name must be at least 2 characters long.',
+    }),
+
+  lastName: Joi.string()
+    .min(2)
+    .trim()
+    .messages({
+      'string.min': 'Last name must be at least 2 characters long.',
+    }),
+
+  phone: Joi.string()
+    .pattern(/^[0-9]{10}$/)
+    .trim()
+    .messages({
+      'string.pattern.base': 'Phone number must be exactly 10 digits.',
+    }),
+
+  email: Joi.string()
+    .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net', 'org', 'in', 'co'] } })
+    .trim()
+    .lowercase()
+    .messages({
+      'string.email': 'Please enter a valid email address.',
+    }),
+
+  role: Joi.string()
+  //admin update these roles by there need
+    .valid('admin', 'user', 'vender') 
+    .messages({
+      'any.only': 'Role must be either admin, employee, or manager.',
     }),
 });
